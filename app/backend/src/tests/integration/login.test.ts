@@ -9,12 +9,16 @@ import User from '../../database/models/User';
 
 import { app } from '../../app';
 
+import LoginValidations from '../../useCases/UserUseCases/login/LoginValidations';
+
+import { compare } from 'bcryptjs';
+
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
 const bodyData = { email: 'any_email@test.com', password: 'any_password' };
-const userMock = { id: 1, username: 'foo', role: 'test', email: bodyData.email, password: bodyData.password };
+const userMock = { email: 'admin@admin.com', password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW' };
 
 describe('POST /login', () => {
   describe('Tests not filled fields', () => {
@@ -48,39 +52,43 @@ describe('POST /login', () => {
 
       it('Resolves status 401', async () => {
         const httpResponse = await chai
-        .request(app)
-        .post('/login')
-        .send(bodyData);
+          .request(app)
+          .post('/login')
+          .send(bodyData);
 
       expect(httpResponse.status).to.equal(401);
       expect(httpResponse.body).to.deep.equal({ message: 'Incorrect email or password' });
       });
     });
+
     describe("Email exists but incorrect password", () => {
       beforeEach(() => sinon.stub(Model, 'findOne').resolves(userMock as User));
       afterEach(() => sinon.restore());
 
       it('Resolves status 401', async () => {
         const httpResponse = await chai
-        .request(app)
-        .post('/login')
-        .send(bodyData);
+          .request(app)
+          .post('/login')
+          .send(bodyData);
 
-      expect(httpResponse.status).to.equal(401);
-      expect(httpResponse.body).to.deep.equal({ message: 'Incorrect email or password' });
+        expect(httpResponse.status).to.equal(401);
+        expect(httpResponse.body).to.deep.equal({ message: 'Incorrect email or password' });
       });
     });
   });
 
   describe('Valid data', () => {
+    beforeEach(() => sinon.stub(Model, 'findOne').resolves(userMock as User));
+    afterEach(() => sinon.restore());
+    
     it('Resolves status 200', async () => {
       const httpResponse = await chai
         .request(app)
         .post('/login')
-        .send(bodyData);
+        .send({ email: 'admin@admin.com', password: 'secret_admin' });
 
       expect(httpResponse.status).to.equal(200);
-      expect(httpResponse.body).to.have.param('token');
+      expect(httpResponse.body).to.have.property('token');
       expect(httpResponse.body.token).to.be.a('string');
     })
   });

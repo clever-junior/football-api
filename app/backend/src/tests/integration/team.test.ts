@@ -13,8 +13,6 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-const bodyData = { email: 'any_email@test.com', password: 'any_password' };
-
 const teamMock = { id:5, teamName: 'Cruzeiro' };
 
 const teamsMock = [
@@ -35,6 +33,8 @@ const teamsMock = [
 describe('GET /teams', () => {
   describe('Returns all teams correctly', () => {
     beforeEach(() => sinon.stub(Model, 'findAll').resolves(teamsMock as Team[]));
+    afterEach(() => sinon.restore());
+    
     it('Resolves status 200', async () => {
       const httpResponse = await chai
         .request(app)
@@ -49,6 +49,8 @@ describe('GET /teams', () => {
 describe('GET /teams/:id', () => {
   describe('Returns a specific team correctly', () => {
     beforeEach(() => sinon.stub(Model, 'findOne').resolves(teamMock as Team));
+    afterEach(() => sinon.restore());
+
     it('Resolves status 200', async () => {
       const httpResponse = await chai
         .request(app)
@@ -56,6 +58,18 @@ describe('GET /teams/:id', () => {
 
       expect(httpResponse.status).to.equal(200);
       expect(httpResponse.body).to.deep.equal(teamMock);
+    });
+  });
+  describe('Tests bad request', () => {
+    beforeEach(() => sinon.stub(Model, 'findOne').resolves(null));
+    afterEach(() => sinon.restore());
+
+    it('Resolves status 400', async () => {
+      const httpResponse = await chai
+        .request(app)
+        .get('/teams/5')
+
+      expect(httpResponse.status).to.equal(400);
     });
   });
 });

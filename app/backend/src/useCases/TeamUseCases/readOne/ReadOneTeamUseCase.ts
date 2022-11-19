@@ -13,8 +13,8 @@ export default class ReadOneTeamUseCase {
 
     const team = await this.teamRepository.readOne(id);
 
-    if (team) { return team; }
+    if (!team) { Error.badRequest('Team not found'); }
 
-    return null;
+    return team;
   }
 }

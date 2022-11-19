@@ -18,7 +18,7 @@ export default class LoginUseCase {
 
     const user = await this.usersRepository.readByEmail(data.email);
 
-    this.loginValidation.invalidParams(user as User, data);
+    LoginValidation.invalidParams(user as User, data);
 
     if (user) {
       const token = Token.generate(user);

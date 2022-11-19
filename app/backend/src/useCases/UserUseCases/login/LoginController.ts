@@ -11,7 +11,7 @@ export default class LoginController {
 
     const token = await this.loginUseCase.execute({ email, password });
 
-    if (!token) { return res.status(500).json({ message: 'Error' }) }
+    if (!token) { return res.status(500).json({ message: 'Error' }); }
 
     return res.status(200).json({ token });
   }

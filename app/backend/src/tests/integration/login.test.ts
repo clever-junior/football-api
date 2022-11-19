@@ -9,10 +9,6 @@ import User from '../../database/models/User';
 
 import { app } from '../../app';
 
-import LoginValidations from '../../useCases/UserUseCases/login/LoginValidations';
-
-import { compare } from 'bcryptjs';
-
 chai.use(chaiHttp);
 
 const { expect } = chai;
@@ -92,4 +88,31 @@ describe('POST /login', () => {
       expect(httpResponse.body.token).to.be.a('string');
     })
   });
+});
+
+describe('GET /login/validate', () => {
+  describe('Validate token and verify role', () => {
+    it('Resolves status 200', async () => {
+      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJ1c2VybmFtZSI6IkFkbWluIiwicm9sZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJwYXNzd29yZCI6IiQyYSQwOCR4aS5IeGsxY3pBTzBuWlIuLkIzOTN1MTBhRUQwUlExTjNQQUVYUTdIeHRMaktQRVpCdS5QVyJ9LCJpYXQiOjE2Njg4MzYwNTJ9.g_jfyBmiepfUjuvkW850swBOm5knyN3XnuXnKOWPlUg';
+      const httpResponse = await chai
+        .request(app)
+        .get('/login/validate')
+        .set('authorization', token);
+      
+      expect(httpResponse.status).to.equal(200);
+      expect(httpResponse.body).to.have.key('role');
+    })
+  })
+  describe('Verify invalid token', () => {
+    it('Resolves status 401', async () => {
+      const token = '';
+      const httpResponse = await chai
+        .request(app)
+        .get('/login/validate')
+        .set('authorization', token);
+      
+      expect(httpResponse.status).to.equal(401);
+      expect(httpResponse.body).to.deep.equal({ message: 'Invalid token' });
+    })
+  })
 });

@@ -13,7 +13,7 @@ export default class LoginUseCase {
     this.loginValidation = new LoginValidation();
   }
 
-  async execute(data: ILoginDTO): Promise<string | {}> {
+  async execute(data: ILoginDTO): Promise<string | null> {
     this.loginValidation.missingParams(data);
 
     const user = await this.usersRepository.readByEmail(data.email);
@@ -24,6 +24,7 @@ export default class LoginUseCase {
       const token = Token.generate(user);
       return token;
     }
-     return {};
+
+    return null;
   }
 }

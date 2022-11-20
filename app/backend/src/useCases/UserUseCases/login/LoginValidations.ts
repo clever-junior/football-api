@@ -12,12 +12,6 @@ export default class LoginValidation {
     this.requiredFields = ['email', 'password'];
   }
 
-  missingParams(data: ILoginDTO) {
-    this.requiredFields.forEach((key) => {
-      if (!data[key]) { Error.badRequest('All fields must be filled'); }
-    });
-  }
-
   static invalidParams(user: User, data: ILoginDTO) {
     if (!user) {
       Error.unauthorized('Incorrect email or password');

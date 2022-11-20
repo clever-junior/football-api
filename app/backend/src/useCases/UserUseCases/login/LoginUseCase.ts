@@ -14,8 +14,6 @@ export default class LoginUseCase {
   }
 
   async execute(data: ILoginDTO): Promise<string | null> {
-    this.loginValidation.missingParams(data);
-
     const user = await this.usersRepository.readByEmail(data.email);
 
     LoginValidation.invalidParams(user as User, data);

@@ -1,4 +1,5 @@
 import { sign, Secret, verify, JwtPayload } from 'jsonwebtoken';
+import UnauthorizedError from '../errors/UnauthorizedError';
 import User from '../database/models/User';
 
 export default class Token {
@@ -11,8 +12,15 @@ export default class Token {
 
   static validate(token: string) {
     const secret = process.env.JWT_SECRET as Secret;
-    const payload = verify(token, secret);
 
-    return payload as JwtPayload;
+    let payload: JwtPayload | undefined;
+
+    verify(token, secret, (err, decoded) => {
+      if (err) { throw new UnauthorizedError('Invalid token'); }
+
+      payload = decoded;
+    });
+
+    return payload;
   }
 }

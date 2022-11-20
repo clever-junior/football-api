@@ -5,9 +5,9 @@ import chaiHttp = require('chai-http');
 
 import { Model } from 'sequelize';
 
-import { app } from '../../app';
+import { app } from '../app';
 
-import Team from '../../database/models/Team';
+import Team from '../database/models/Team';
 
 chai.use(chaiHttp);
 

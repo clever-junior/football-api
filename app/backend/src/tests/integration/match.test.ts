@@ -267,7 +267,7 @@ describe('POST /matches', () => {
     });
   })
   describe("Invalid fields", () => {
-    beforeEach(() => sinon.stub(Team, 'findOne').resolves(null));
+    beforeEach(() => sinon.stub(Model, 'findOne'));
     afterEach(() => sinon.restore());
 
     it('Resolves status 404', async () => {
@@ -281,4 +281,20 @@ describe('POST /matches', () => {
       expect(httpResponse.body).to.deep.equal({ message: 'There is no team with such id!' });
     });
   })
+});
+
+describe('PATCH /:id/finish', () => {
+  describe('Tests finished match', () => {
+    beforeEach(() => sinon.stub(Model, 'update'));
+    afterEach(() => sinon.restore());
+
+    it('Resolves status 200', async () => {
+      const httpResponse = await chai
+        .request(app)
+        .patch('/matches/1/finish');
+
+    expect(httpResponse.status).to.equal(200);
+    expect(httpResponse.body).to.deep.equal({ message: 'Finished' });
+    })
+  });
 });

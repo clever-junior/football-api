@@ -17,6 +17,6 @@ export default class ReadAllMatchesController {
       return res.status(200).json(matches);
     }
 
-    return res.sendStatus(500);
+    return res.status(500).json({ message: 'error' });
   }
 }

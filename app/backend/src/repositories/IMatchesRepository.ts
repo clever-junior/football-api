@@ -6,4 +6,5 @@ export default interface IMatchesRepository {
   readOne(id: number | string): Promise<Match | null>;
   readByInProgress(inProgress: boolean): Promise<Match[]>;
   create(data: ICreateMatchDTO): Promise<Match>;
+  updateInProgress(id: number | string): Promise<void>;
 }

@@ -20,19 +20,15 @@ Match.init({
   },
   homeTeam: {
     type: INTEGER,
-    allowNull: false,
   },
   homeTeamGoals: {
     type: INTEGER,
-    allowNull: false,
   },
   awayTeam: {
     type: INTEGER,
-    allowNull: false,
   },
   awayTeamGoals: {
     type: INTEGER,
-    allowNull: false,
   },
   inProgress: {
     type: INTEGER,

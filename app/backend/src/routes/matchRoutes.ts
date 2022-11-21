@@ -4,6 +4,7 @@ import authMiddleware from '../middlewares/authMiddleware';
 import { createMatchController } from '../useCases/MatchUseCases/create';
 import { readAllMatchesController } from '../useCases/MatchUseCases/readAll';
 import { finishMatchController } from '../useCases/MatchUseCases/finish';
+import verifyTeamsMiddleware from '../middlewares/verifyTeamsMiddleware';
 
 const matchRoutes = Router();
 
@@ -20,6 +21,7 @@ matchRoutes
     '/',
     authMiddleware,
     (req, res, next) => validateFieldsMiddleware.execute(req, res, next),
+    verifyTeamsMiddleware,
     (req, res) => createMatchController.handle(req, res),
   );
 

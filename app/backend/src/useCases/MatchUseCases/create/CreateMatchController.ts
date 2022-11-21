@@ -11,8 +11,6 @@ export default class CreateMatchController {
 
     const match = await this.createMatchUseCase.execute(data);
 
-    if (!match) { return res.status(500).json({ message: 'Error' }); }
-
     return res.status(201).json(match);
   }
 }

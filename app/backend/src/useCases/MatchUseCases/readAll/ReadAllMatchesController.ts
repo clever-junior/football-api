@@ -13,10 +13,6 @@ export default class ReadAllMatchesController {
 
     const matches = await this.readAllMatchesUseCase.execute(inProgress);
 
-    if (matches) {
-      return res.status(200).json(matches);
-    }
-
-    return res.status(500).json({ message: 'error' });
+    return res.status(200).json(matches);
   }
 }

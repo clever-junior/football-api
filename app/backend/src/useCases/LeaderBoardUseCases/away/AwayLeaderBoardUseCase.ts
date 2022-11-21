@@ -1,8 +1,7 @@
 import IMatchesRepository from '../../../repositories/IMatchesRepository';
 import ITeamsRepository from '../../../repositories/ITeamsRepository';
-import { generateHomeLeaderboard } from './HomeLeaderBoardValidations';
 
-export default class HomeLeaderBoardUseCase {
+export default class AwayLeaderBoardUseCase {
   constructor(
     private matchRepository: IMatchesRepository,
     private teamRepository: ITeamsRepository,
@@ -12,7 +11,7 @@ export default class HomeLeaderBoardUseCase {
     const teams = await this.teamRepository.readAll();
     const matches = await this.matchRepository.readByInProgress(false);
 
-    const leaderBoard = generateHomeLeaderboard(matches, teams);
+    const leaderBoard = { teams, matches };
 
     return leaderBoard;
   }

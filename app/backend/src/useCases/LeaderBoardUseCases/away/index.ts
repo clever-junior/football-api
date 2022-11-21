@@ -2,8 +2,8 @@ import MatchRepository from '../../../repositories/implementations/MatchesReposi
 import TeamRepository from '../../../repositories/implementations/TeamsRepository';
 import Match from '../../../database/models/Match';
 import Team from '../../../database/models/Team';
-import HomeLeaderBoardController from './HomeLeaderBoardController';
-import HomeLeaderBoardUseCase from './HomeLeaderBoardUseCase';
+import AwayLeaderBoardController from './AwayLeaderBoardController';
+import AwayLeaderBoardUseCase from './AwayLeaderBoardUseCase';
 
 const teamRepository = new TeamRepository(
   Team,
@@ -13,13 +13,13 @@ const matchRepository = new MatchRepository(
   Match,
 );
 
-const leaderBoardHomeUseCase = new HomeLeaderBoardUseCase(
+const leaderBoardAwayUseCase = new AwayLeaderBoardUseCase(
   matchRepository,
   teamRepository,
 );
 
-const leaderBoardHomeController = new HomeLeaderBoardController(
-  leaderBoardHomeUseCase,
+const leaderBoardAwayController = new AwayLeaderBoardController(
+  leaderBoardAwayUseCase,
 );
 
-export { leaderBoardHomeController, leaderBoardHomeUseCase };
+export { leaderBoardAwayController, leaderBoardAwayUseCase };

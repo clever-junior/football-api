@@ -7,11 +7,16 @@ export default class ReadAllMatchesController {
   ) {}
 
   async handle(req: Request, res: Response): Promise<Response> {
-    const query = req.query.inProgress;
+    const { inProgress } = req.query;
 
-    const inProgress = query === 'true';
+    let matches;
 
-    const matches = await this.readAllMatchesUseCase.execute(inProgress);
+    if (inProgress) {
+      const isInProgress = inProgress === 'true';
+      matches = await this.readAllMatchesUseCase.execute(isInProgress);
+    } else {
+      matches = await this.readAllMatchesUseCase.readAll();
+    }
 
     return res.status(200).json(matches);
   }

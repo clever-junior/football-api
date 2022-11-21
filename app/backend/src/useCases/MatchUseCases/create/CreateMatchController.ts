@@ -13,9 +13,9 @@ export default class CreateMatchController {
 
     const { homeTeam, awayTeam } = data;
 
-    const validateHomeTeam = this.teamRepository.readOne(+homeTeam);
+    const validateHomeTeam = this.teamRepository.readOne(homeTeam);
 
-    const validateAwayTeam = this.teamRepository.readOne(+awayTeam);
+    const validateAwayTeam = this.teamRepository.readOne(awayTeam);
 
     if (!validateHomeTeam || !validateAwayTeam) {
       return res.status(404).json({ message: 'There is no team with such id!' });

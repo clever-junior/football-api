@@ -13,7 +13,7 @@ function sortLeaderBoard(lb: ILeaderBoardDTO[]) {
   return sorted;
 }
 
-export function calculateTotalGames(matches: Match[], teamId: number) {
+export function TotalGames(matches: Match[], teamId: number) {
   const totalGames = matches.reduce((acc, curr) => {
     if (curr.homeTeam === teamId || curr.awayTeam === teamId) return acc + 1;
     return acc;
@@ -21,7 +21,7 @@ export function calculateTotalGames(matches: Match[], teamId: number) {
   return totalGames;
 }
 
-export function calculateGoalsFavor(matches: Match[], teamId: number) {
+export function GoalsFavor(matches: Match[], teamId: number) {
   const totalGoals = matches.reduce((acc, curr) => {
     if (curr.homeTeam === teamId) return acc + curr.homeTeamGoals;
     if (curr.awayTeam === teamId) return acc + curr.awayTeamGoals;
@@ -30,7 +30,7 @@ export function calculateGoalsFavor(matches: Match[], teamId: number) {
   return totalGoals;
 }
 
-export function calculateTotalVictories(matches: Match[], teamId: number) {
+export function TotalVictories(matches: Match[], teamId: number) {
   const totalVictories = matches.reduce((acc, curr) => {
     if (curr.homeTeam === teamId && curr.homeTeamGoals > curr.awayTeamGoals) return acc + 1;
     if (curr.awayTeam === teamId && curr.awayTeamGoals > curr.homeTeamGoals) return acc + 1;
@@ -39,7 +39,7 @@ export function calculateTotalVictories(matches: Match[], teamId: number) {
   return totalVictories;
 }
 
-export function calculateTotalDraws(matches: Match[], teamId: number) {
+export function TotalDraws(matches: Match[], teamId: number) {
   const totalDraws = matches.reduce((acc, curr) => {
     if ((curr.homeTeam === teamId || curr.awayTeam === teamId)
     && curr.homeTeamGoals === curr.awayTeamGoals) return acc + 1;
@@ -48,7 +48,7 @@ export function calculateTotalDraws(matches: Match[], teamId: number) {
   return totalDraws;
 }
 
-export function calculateTotalLosses(matches: Match[], teamId: number) {
+export function TotalLosses(matches: Match[], teamId: number) {
   const totalLosses = matches.reduce((acc, curr) => {
     if (curr.homeTeam === teamId && curr.homeTeamGoals < curr.awayTeamGoals) return acc + 1;
     if (curr.awayTeam === teamId && curr.awayTeamGoals < curr.homeTeamGoals) return acc + 1;
@@ -57,13 +57,13 @@ export function calculateTotalLosses(matches: Match[], teamId: number) {
   return totalLosses;
 }
 
-export function calculatePoints(matches: Match[], teamId: number) {
-  const victories = calculateTotalVictories(matches, teamId);
-  const draws = calculateTotalDraws(matches, teamId);
+export function Points(matches: Match[], teamId: number) {
+  const victories = TotalVictories(matches, teamId);
+  const draws = TotalDraws(matches, teamId);
   return victories * 3 + draws;
 }
 
-export function calculateGoalsOwn(matches: Match[], teamId: number) {
+export function GoalsOwn(matches: Match[], teamId: number) {
   const goalsOwn = matches.reduce((acc, curr) => {
     if (curr.homeTeam === teamId) return acc + curr.awayTeamGoals;
     if (curr.awayTeam === teamId) return acc + curr.homeTeamGoals;
@@ -72,15 +72,15 @@ export function calculateGoalsOwn(matches: Match[], teamId: number) {
   return goalsOwn;
 }
 
-export function calculateGoalsBalance(matches: Match[], teamId: number) {
-  const goalsFavor = calculateGoalsFavor(matches, teamId);
-  const goalsOwn = calculateGoalsOwn(matches, teamId);
+export function GoalsBalance(matches: Match[], teamId: number) {
+  const goalsFavor = GoalsFavor(matches, teamId);
+  const goalsOwn = GoalsOwn(matches, teamId);
   return goalsFavor - goalsOwn;
 }
 
-export function calculateTeamEfficiency(matches: Match[], teamId: number) {
-  const totalPoints = calculatePoints(matches, teamId);
-  const totalGames = calculateTotalGames(matches, teamId);
+export function TeamEfficiency(matches: Match[], teamId: number) {
+  const totalPoints = Points(matches, teamId);
+  const totalGames = TotalGames(matches, teamId);
   return +((totalPoints / (totalGames * 3)) * 100).toFixed(2);
 }
 
@@ -88,15 +88,15 @@ export default function generateLeaderBoard(matches: Match[], teams: Team[]) {
   const leaderBoard = teams.map(({ id, teamName }) => {
     const teamLeaderBoard = {
       name: teamName,
-      totalPoints: calculatePoints(matches, id),
-      totalGames: calculateTotalGames(matches, id),
-      totalVictories: calculateTotalVictories(matches, id),
-      totalDraws: calculateTotalDraws(matches, id),
-      totalLosses: calculateTotalLosses(matches, id),
-      goalsFavor: calculateGoalsFavor(matches, id),
-      goalsOwn: calculateGoalsOwn(matches, id),
-      goalsBalance: calculateGoalsBalance(matches, id),
-      efficiency: calculateTeamEfficiency(matches, id),
+      totalPoints: Points(matches, id),
+      totalGames: TotalGames(matches, id),
+      totalVictories: TotalVictories(matches, id),
+      totalDraws: TotalDraws(matches, id),
+      totalLosses: TotalLosses(matches, id),
+      goalsFavor: GoalsFavor(matches, id),
+      goalsOwn: GoalsOwn(matches, id),
+      goalsBalance: GoalsBalance(matches, id),
+      efficiency: TeamEfficiency(matches, id),
     };
     return teamLeaderBoard;
   });
@@ -106,15 +106,15 @@ export default function generateLeaderBoard(matches: Match[], teams: Team[]) {
 function generateTeamLeaderBoard(matches: Match[], teamId: number, teamName: string) {
   const leaderBoard = {
     name: teamName,
-    totalPoints: calculatePoints(matches, teamId),
-    totalGames: calculateTotalGames(matches, teamId),
-    totalVictories: calculateTotalVictories(matches, teamId),
-    totalDraws: calculateTotalDraws(matches, teamId),
-    totalLosses: calculateTotalLosses(matches, teamId),
-    goalsFavor: calculateGoalsFavor(matches, teamId),
-    goalsOwn: calculateGoalsOwn(matches, teamId),
-    goalsBalance: calculateGoalsBalance(matches, teamId),
-    efficiency: calculateTeamEfficiency(matches, teamId),
+    totalPoints: Points(matches, teamId),
+    totalGames: TotalGames(matches, teamId),
+    totalVictories: TotalVictories(matches, teamId),
+    totalDraws: TotalDraws(matches, teamId),
+    totalLosses: TotalLosses(matches, teamId),
+    goalsFavor: GoalsFavor(matches, teamId),
+    goalsOwn: GoalsOwn(matches, teamId),
+    goalsBalance: GoalsBalance(matches, teamId),
+    efficiency: TeamEfficiency(matches, teamId),
   };
   return leaderBoard;
 }

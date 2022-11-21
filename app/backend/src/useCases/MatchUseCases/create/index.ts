@@ -15,11 +15,11 @@ const teamRepository = new TeamRepository(
 
 const createMatchUseCase = new CreateMatchUseCase(
   matchRepository,
-  teamRepository,
 );
 
 const createMatchController = new CreateMatchController(
   createMatchUseCase,
+  teamRepository,
 );
 
 export { createMatchController, createMatchUseCase };

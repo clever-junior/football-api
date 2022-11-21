@@ -266,7 +266,7 @@ describe('POST /matches', () => {
     });
   })
   describe("Invalid fields", () => {
-    beforeEach(() => sinon.stub(Model, 'findOne'));
+    beforeEach(() => sinon.stub(Model, 'findOne').resolves(null));
     afterEach(() => sinon.restore());
 
     it('Resolves status 404', async () => {
@@ -274,7 +274,7 @@ describe('POST /matches', () => {
         .request(app)
         .post('/matches')
         .set('authorization', validToken)
-        .send({ ...bodyData });
+        .send({ homeTeam: 112, awayTeam: 213, homeTeamGoals: 2, awayTeamGoals: 2 });
 
       expect(httpResponse.status).to.equal(404);
       expect(httpResponse.body).to.deep.equal({ message: 'There is no team with such id!' });

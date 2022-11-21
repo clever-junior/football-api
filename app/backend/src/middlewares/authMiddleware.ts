@@ -6,7 +6,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization;
 
   if (!token) {
-    throw new UnauthorizedError('Token not found');
+    return res.status(401).json({ message: 'Token not found' });
   }
 
   Token.validate(token);

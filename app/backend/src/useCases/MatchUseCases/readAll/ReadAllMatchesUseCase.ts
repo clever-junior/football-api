@@ -6,7 +6,7 @@ export default class ReadAllMatchesUseCase {
     private teamRepository: IMatchesRepository,
   ) {}
 
-  async execute(inProgress?: boolean): Promise<Match[]> {
+  async execute(inProgress: boolean): Promise<Match[]> {
     if (inProgress) {
       const matches = await this.teamRepository.readByInProgress(inProgress);
 

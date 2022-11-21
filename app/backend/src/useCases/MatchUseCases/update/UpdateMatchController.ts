@@ -10,6 +10,10 @@ export default class UpdateMatchController {
     const { id } = req.params;
     const data = req.body;
 
+    if (!data.homeTeamGoals || !data.awayTeamGoals) {
+      return res.status(400).json({ message: 'All fields must be filled' });
+    }
+
     if (!id) { return res.status(404).json({ message: 'Not found' }); }
 
     await this.updateMatchUseCase.execute(data, +id);

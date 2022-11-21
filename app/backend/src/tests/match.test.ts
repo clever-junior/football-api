@@ -306,7 +306,7 @@ describe('PATCH /:id', () => {
           .request(app)
           .patch('/matches')
           .set('authorization', validToken)
-          .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
+          .send({ awayTeamGoals: 1 });
 
         expect(httpResponse.status).to.equal(400);
         expect(httpResponse.body).to.deep.equal({ message: 'All fields must be filled' });
@@ -319,7 +319,7 @@ describe('PATCH /:id', () => {
           .request(app)
           .patch('/matches/1')
           .set('authorization', validToken)
-          .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
+          .send({ homeTeamGoals: 3 });
 
         expect(httpResponse.status).to.equal(400);
         expect(httpResponse.body).to.deep.equal({ message: 'All fields must be filled' });
@@ -330,7 +330,7 @@ describe('PATCH /:id', () => {
     it('resolves status 404', async () => {
       const httpResponse = await chai
         .request(app)
-        .patch('/matches')
+        .patch('/matches/')
         .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
 
       expect(httpResponse.status).to.equal(404);

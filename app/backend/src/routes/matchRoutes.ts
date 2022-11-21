@@ -20,8 +20,6 @@ matchRoutes.patch(
 
 matchRoutes.patch(
   '/:id',
-  (req, res, next) => validateFieldsMiddleware.execute(req, res, next),
-
   (req, res) => updateMatchController.handle(req, res),
 );
 

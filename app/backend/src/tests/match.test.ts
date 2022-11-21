@@ -297,3 +297,72 @@ describe('PATCH /:id/finish', () => {
     })
   });
 });
+
+describe('PATCH /:id', () => {
+  describe('Tests not filled fields', () => {
+    describe('When "homeTeamGoals" field not filled', () => {
+      it('Resolves status 400', async () => {
+        const httpResponse = await chai
+          .request(app)
+          .patch('/matches')
+          .set('authorization', validToken)
+          .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
+
+        expect(httpResponse.status).to.equal(400);
+        expect(httpResponse.body).to.deep.equal({ message: 'All fields must be filled' });
+      });
+    });
+    describe('When "awayTeamGoals" field not filled', () => {
+      bodyData.awayTeam = undefined;
+      it('Resolves status 400', async () => {
+        const httpResponse = await chai
+          .request(app)
+          .patch('/matches/1')
+          .set('authorization', validToken)
+          .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
+
+        expect(httpResponse.status).to.equal(400);
+        expect(httpResponse.body).to.deep.equal({ message: 'All fields must be filled' });
+      });
+    });
+  });
+  describe('Tests not id provided', () => {
+    it('resolves status 404', async () => {
+      const httpResponse = await chai
+        .request(app)
+        .patch('/matches')
+        .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
+
+      expect(httpResponse.status).to.equal(404);
+      expect(httpResponse.body).to.deep.equal({ message: 'Not found' });
+    });
+  });
+  // describe('Tests invalid id', () => {
+  //   beforeEach(() => sinon.stub(Model, 'update').resolves());
+  //   afterEach(() => sinon.restore());
+
+  //   it('resolves status 404', async () => {
+  //     const httpResponse = await chai
+  //       .request(app)
+  //       .patch('/matches')
+  //       .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
+
+  //     expect(httpResponse.status).to.equal(404);
+  //     expect(httpResponse.body).to.deep.equal({ message: 'Not found' });
+  //   });
+  // });
+  describe('Tests finished match', () => {
+    beforeEach(() => sinon.stub(Model, 'update'));
+    afterEach(() => sinon.restore());
+
+    it('Resolves status 200', async () => {
+      const httpResponse = await chai
+        .request(app)
+        .patch('/matches/1')
+        .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
+
+    expect(httpResponse.status).to.equal(200);
+    expect(httpResponse.body).to.deep.equal({ message: 'Updated success' });
+    })
+  });
+});

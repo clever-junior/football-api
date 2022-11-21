@@ -2,6 +2,7 @@ import Team from '../../database/models/Team';
 import Match from '../../database/models/Match';
 import IMatchesRepository from '../IMatchesRepository';
 import ICreateMatchDTO from '../../useCases/MatchUseCases/create/ICreateMatchDTO';
+import UpdateMatchDTO from '../../useCases/MatchUseCases/update/UpdateMatchDTO';
 
 export default class MatchRepository implements IMatchesRepository {
   constructor(
@@ -39,6 +40,12 @@ export default class MatchRepository implements IMatchesRepository {
         { model: Team, as: 'teamAway', attributes: ['teamName'] },
       ] });
     return matches;
+  }
+
+  async update(data: UpdateMatchDTO, id: string | number): Promise<void> {
+    const { homeTeamGoals, awayTeamGoals } = data;
+
+    await this.matchModel.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
   }
 
   async updateInProgress(id: string | number): Promise<void> {

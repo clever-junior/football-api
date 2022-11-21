@@ -190,7 +190,7 @@ describe('POST /matches', () => {
           .set('authorization', token);
         
         expect(httpResponse.status).to.equal(401);
-        expect(httpResponse.body).to.deep.equal({ message: 'Invalid token' });
+        expect(httpResponse.body).to.deep.equal({ message: 'Token must be a valid token' });
       });
     });
   });
